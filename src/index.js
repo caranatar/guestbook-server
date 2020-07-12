@@ -61,7 +61,8 @@ createStore().then((store) => {
     res.send(`<html><body><h2>hello express</h2><p>${token}</p></body></html>`);
   });
 
-  app.listen({ port: 8000 }, () => {
-    console.log("Apollo Server on http://localhost:8000/graphql");
+  const port = process.env.NODE_PORT || 8000;
+  app.listen({ port: port }, () => {
+    console.log(`Apollo Server on http://localhost:${port}/graphql`);
   });
 });
