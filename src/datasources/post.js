@@ -1,4 +1,5 @@
 import { DataSource } from "apollo-datasource";
+import { AuthenticationError } from "apollo-server";
 
 class PostAPI extends DataSource {
   constructor({ store }) {
@@ -55,6 +56,10 @@ class PostAPI extends DataSource {
   }
 
   async createPost(id, auth, title, contents, userAPI) {
+    if (!auth || !auth.sub || auth.sub !== id) {
+      throw new AuthenticationError("id does not match authenticated subject");
+    }
+
     const user = await userAPI.findOrCreateUser({ subject: id });
     if (!user) return null;
     const post = await this.store.Post.create({ title, contents, userId: id });
