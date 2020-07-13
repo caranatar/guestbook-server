@@ -11,6 +11,8 @@ import PostAPI from "./datasources/post.js";
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 import cors from "cors";
+import https from "https";
+import fs from "fs";
 
 const app = express();
 app.use(cors());
@@ -62,7 +64,11 @@ createStore().then((store) => {
   });
 
   const port = process.env.NODE_PORT || 8000;
-  app.listen({ port: port }, () => {
+  https.createServer({
+    key: fs.readFileSync(process.env.SSL_PRIVATE_KEY),
+    cert: fs.readFileSync(process.env.SSL_CERT_FILE),
+  }, app)
+  .listen({ port: port }, () => {
     console.log(`Apollo Server on http://localhost:${port}/graphql`);
   });
 });
