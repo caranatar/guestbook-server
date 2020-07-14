@@ -1,10 +1,5 @@
 const resolvers = {
   Query: {
-    me: () => {
-      return {
-        username: "Robin Wieruch",
-      };
-    },
     post: (_, { id }, { dataSources }) =>
       dataSources.postAPI.getPostById(id, dataSources.userAPI),
     posts: (_, __, { dataSources }) =>
